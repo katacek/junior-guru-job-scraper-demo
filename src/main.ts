@@ -44,7 +44,7 @@ interface Offer {
 
 await Actor.init();
 
-const { keyword = 'javascript', seniority = 'junior', maxResults = 50 } = (await Actor.getInput<Input>()) ?? {};
+const { keyword = '', seniority = '', maxResults = 50 } = (await Actor.getInput<Input>()) ?? {};
 
 log.info(`Searching StartupJobs.cz for: "${keyword}" | seniority: "${seniority || 'all'}" (max ${maxResults} results)`);
 
@@ -91,7 +91,7 @@ while (collected < maxResults) {
 
         const isDevRole = (offer.areaSlugs ?? []).some((slug) => DEV_AREA_SLUGS.has(slug));
         const isSeniorityMatch = !seniority || (offer.seniorities ?? []).includes(seniority);
-        const isKeywordMatch = offer.name?.toLowerCase().includes(keyword.toLowerCase());
+        const isKeywordMatch = !keyword || offer.name?.toLowerCase().includes(keyword.toLowerCase());
         if (!isDevRole || !isSeniorityMatch || !isKeywordMatch) continue;
 
         const { salary } = offer;

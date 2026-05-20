@@ -7,8 +7,8 @@
         "keyword": {
             "title": "Search keyword",
             "type": "string",
-            "description": "Technology or role to search for on StartupJobs.cz (e.g. 'python', 'javascript', 'react')",
-            "default": "javascript",
+            "description": "Technology or role to search for on StartupJobs.cz (e.g. 'python', 'javascript', 'react'). Leave empty to return all developer positions.",
+            "default": "",
             "editor": "textfield"
         },
         "seniority": {
@@ -18,7 +18,7 @@
             "editor": "select",
             "enum": ["", "junior", "medior", "senior"],
             "enumTitles": ["All levels", "Junior", "Medior", "Senior"],
-            "default": "junior"
+            "default": ""
         },
         "maxResults": {
             "title": "Max results",
@@ -29,5 +29,5 @@
             "maximum": 500
         }
     },
-    "required": ["keyword"]
+    "required": []
 }
