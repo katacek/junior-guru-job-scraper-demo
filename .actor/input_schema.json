@@ -1,0 +1,33 @@
+{
+    "$schema": "https://apify.com/schemas/v1/input.ide.json",
+    "title": "Junior Job Tracker",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "keyword": {
+            "title": "Search keyword",
+            "type": "string",
+            "description": "Technology or role to search for on StartupJobs.cz (e.g. 'python', 'javascript', 'react')",
+            "default": "javascript",
+            "editor": "textfield"
+        },
+        "seniority": {
+            "title": "Seniority",
+            "type": "string",
+            "description": "Filter by seniority level. Leave empty to return all levels.",
+            "editor": "select",
+            "enum": ["", "junior", "medior", "senior"],
+            "enumTitles": ["All levels", "Junior", "Medior", "Senior"],
+            "default": "junior"
+        },
+        "maxResults": {
+            "title": "Max results",
+            "type": "integer",
+            "description": "Maximum number of job listings to collect",
+            "default": 50,
+            "minimum": 1,
+            "maximum": 500
+        }
+    },
+    "required": ["keyword"]
+}

@@ -1,0 +1,21 @@
+# Apify local storage (not synced to cloud)
+storage/
+
+# Build output
+dist/
+
+# Dependencies
+node_modules/
+
+# Environment
+.env
+
+# Editor
+.vscode/
+.idea/
+.zed/
+.mise.toml
+.nvim.lua
+
+# OS
+.DS_Store

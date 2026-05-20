@@ -1,0 +1,69 @@
+{
+    "$schema": "https://apify.com/schemas/v1/dataset.ide.json",
+    "actorSpecification": 1,
+    "fields": {},
+    "views": {
+        "overview": {
+            "title": "Overview",
+            "transformation": {
+                "fields": [
+                    "title",
+                    "company",
+                    "url",
+                    "location",
+                    "isRemote",
+                    "seniority",
+                    "collaboration",
+                    "salary_min",
+                    "salary_max",
+                    "salary_currency"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "title": {
+                        "label": "Title",
+                        "format": "text"
+                    },
+                    "company": {
+                        "label": "Company",
+                        "format": "text"
+                    },
+                    "url": {
+                        "label": "URL",
+                        "format": "link"
+                    },
+                    "location": {
+                        "label": "Location",
+                        "format": "text"
+                    },
+                    "isRemote": {
+                        "label": "Remote",
+                        "format": "boolean"
+                    },
+                    "seniority": {
+                        "label": "Seniority",
+                        "format": "text"
+                    },
+                    "collaboration": {
+                        "label": "Collaboration",
+                        "format": "text"
+                    },
+                    "salary_min": {
+                        "label": "Salary Min",
+                        "format": "number"
+                    },
+                    "salary_max": {
+                        "label": "Salary Max",
+                        "format": "number"
+                    },
+                    "salary_currency": {
+                        "label": "Currency",
+                        "format": "text"
+                    }
+                }
+            }
+        }
+    }
+}

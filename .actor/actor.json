@@ -1,0 +1,19 @@
+{
+	"$schema": "https://apify.com/schemas/v1/actor.ide.json",
+	"actorSpecification": 1,
+	"name": "junior-guru-job-scraper-demo",
+	"title": "Junior Job Tracker — StartupJobs.cz",
+	"description": "Scrapes junior developer job listings from StartupJobs.cz using their public API.",
+	"version": "0.0",
+	"buildTag": "latest",
+	"meta": {
+		"templateId": "ts-empty",
+		"generatedBy": "Claude Code with Claude Sonnet 4.6"
+	},
+	"input": "./input_schema.json",
+	"output": "./output_schema.json",
+	"storages": {
+		"dataset": "./dataset_schema.json"
+	},
+	"dockerfile": "../Dockerfile"
+}
