@@ -52,12 +52,33 @@ let collected = 0;
 let page = 1;
 
 while (collected < maxResults) {
+    // URL example: https://www.startupjobs.cz/api/offers?keyword=javascript&limit=20&page=1
     const url = new URL(API_URL);
     url.searchParams.set('keyword', keyword);
     url.searchParams.set('limit', String(PAGE_SIZE));
     url.searchParams.set('page', String(page));
 
     const response = await fetch(url.toString());
+
+    // The API can return an HTML error page instead of JSON when rate-limited or unavailable,
+    // so we check content-type before attempting to parse.
+    if (!response.ok || !response.headers.get('content-type')?.includes('application/json')) {
+        log.warning(`Page ${page}: unexpected response (status ${response.status}), stopping.`);
+        break;
+    }
+
+    // Response shape: { resultSet: Offer[] }
+    // Example item:
+    // {
+    //   name: "Junior JavaScript Developer",
+    //   company: "Acme s.r.o.",
+    //   url: "/job/12345/junior-javascript-developer",   // relative path — prepend BASE_URL for full link
+    //   locations: "Prague",
+    //   isRemote: true,
+    //   seniorities: ["junior"],
+    //   areaSlugs: ["front-end", "dev"],                // used to filter out non-dev roles
+    //   salary: { min: 40000, max: 60000, currency: "CZK", measure: "monthly" }
+    // }
     const { resultSet: offers = [] } = (await response.json()) as { resultSet?: Offer[] };
 
     if (!offers.length) {
@@ -70,7 +91,8 @@ while (collected < maxResults) {
 
         const isDevRole = (offer.areaSlugs ?? []).some((slug) => DEV_AREA_SLUGS.has(slug));
         const isSeniorityMatch = !seniority || (offer.seniorities ?? []).includes(seniority);
-        if (!isDevRole || !isSeniorityMatch) continue;
+        const isKeywordMatch = offer.name?.toLowerCase().includes(keyword.toLowerCase());
+        if (!isDevRole || !isSeniorityMatch || !isKeywordMatch) continue;
 
         const { salary } = offer;
         await Actor.pushData({
