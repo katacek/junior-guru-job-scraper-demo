@@ -96,6 +96,25 @@ while (collected < maxResults) {
 
 Three concepts, that's it: **fetch → filter → save**.
 
+StartupJobs has a clean API, so we get JSON directly. If it didn't, we'd have to fetch the HTML page and extract data from it using CSS selectors — this is called **parsing**:
+
+```typescript
+// Without an API you'd do something like this instead:
+import * as cheerio from 'cheerio';
+
+const response = await fetch('https://www.startupjobs.cz/nabidky?q=javascript');
+const html = await response.text();        // raw HTML string, not JSON
+const $ = cheerio.load(html);              // parse the HTML
+
+$('.offer-title').each((_, el) => {        // find all elements matching a CSS selector
+    const title = $(el).text().trim();     // extract the text content
+    const url = $(el).attr('href');        // or an attribute
+    console.log(title, url);
+});
+```
+
+HTML structure changes whenever the site redesigns — APIs are much more stable.
+
 ---
 
 ## Step 3 — Run locally
