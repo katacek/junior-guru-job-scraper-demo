@@ -143,7 +143,7 @@ Your actor is now live at [console.apify.com](https://console.apify.com/actors) 
 
 **Export results:**
 - Dataset → **Export** → CSV / JSON
-- Or connect directly to **Gmail** via Apify integrations
+- Or connect directly to **Gmail** via [Apify integrations](https://docs.apify.com/platform/integrations/gmail)
 
 ---
 
@@ -183,6 +183,26 @@ The Apify [documentation](https://docs.apify.com/sdk/js) and [Academy](https://d
 | Compare day-over-day | Store results with a timestamp, diff on next run |
 | Scrape a JS-heavy site | Switch to `PlaywrightCrawler` from Crawlee |
 | Browse 29 000+ ready-made scrapers | [apify.com/store](https://apify.com/store) |
+
+---
+
+## Glossary
+
+**Web scraping** — Automatically collecting data from websites by sending requests and extracting the relevant parts from the response (HTML or JSON).
+
+**Server** — A computer (or program) that listens for requests over the internet and sends back a response. When you open a website, your browser sends a request to a server, which replies with the page content.
+
+**API (Application Programming Interface)** — A formal agreement between two programs on how to exchange data: what you can ask for, how to ask it, and what format the answer comes back in. This scraper uses StartupJobs' public API, which means we get clean JSON instead of having to dig through HTML.
+
+**Parsing** — Analyzing and processing structured text (HTML or JSON) to pull out specific pieces of data. When a site has no API, you parse the raw HTML to find what you need.
+
+**JS site (JavaScript-rendered site)** — A site that builds its content in the browser using JavaScript. A plain HTTP request returns only an empty shell — the actual data isn't in the source HTML at all. You need a headless browser to load these properly.
+
+**Headless browser** — A web browser that runs without a visible window. It works exactly like a normal browser (loads pages, runs JavaScript, processes CSS), but everything happens in memory in the background. Used to scrape JS-rendered sites.
+
+**LLM (Large Language Model)** — A type of AI trained on massive amounts of text, capable of understanding and generating human-like language. In scraping, LLMs can help extract or structure data from unstructured text that would be hard to parse with code alone.
+
+**Proxy** — An intermediary server between you and the target website. Your requests go through it, so the website sees the proxy's IP address instead of yours. Used to avoid IP bans when scraping at scale.
 
 ---
 
