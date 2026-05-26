@@ -2,8 +2,8 @@
 	"$schema": "https://apify.com/schemas/v1/actor.ide.json",
 	"actorSpecification": 1,
 	"name": "junior-guru-job-scraper-demo",
-	"title": "Junior Job Tracker — StartupJobs.cz",
-	"description": "Scrapes junior developer job listings from StartupJobs.cz using their public API.",
+	"title": "StartupJobs.cz demo scraper",
+	"description": "Scrapes developer job listings from StartupJobs.cz using their public API.",
 	"version": "0.0",
 	"buildTag": "latest",
 	"meta": {

@@ -1,6 +1,6 @@
 {
     "$schema": "https://apify.com/schemas/v1/input.ide.json",
-    "title": "Junior Job Tracker",
+    "title": "StartupJobs.cz demo scraper - input",
     "type": "object",
     "schemaVersion": 1,
     "properties": {

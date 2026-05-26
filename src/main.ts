@@ -4,7 +4,7 @@ const BASE_URL = 'https://www.startupjobs.cz';
 const API_URL = `${BASE_URL}/api/offers`;
 const PAGE_SIZE = 20;
 
-
+// Set gives O(1) lookup; these are the area slugs the public API uses for dev roles
 const DEV_AREA_SLUGS = new Set([
     'vyvoj',
     'back-end-vyvojar',
@@ -16,33 +16,61 @@ const DEV_AREA_SLUGS = new Set([
     'it-security-specialista',
     'system-admin',
     'qa-tester',
+    'developer',
 ]);
 
-interface Input {
-    keyword?: string;
-    seniority?: string;
-    maxResults?: number;
-}
+type Seniority = 'junior' | 'medior' | 'senior';
+type Collaboration = 'external' | 'remote' | 'internship';
 
-interface Salary {
+type Input = {
+    keyword?: string;
+    seniority?: Seniority | '';
+    maxResults?: number;
+};
+
+type Salary = {
     min?: number;
     max?: number;
     currency?: string;
-}
+    measure?: 'monthly';
+};
 
-interface Offer {
+type Offer = {
     name?: string;
     company?: string;
     url?: string;
     locations?: string;
     isRemote?: boolean;
-    seniorities?: string[];
-    collaborations?: string;
+    seniorities?: Seniority[];
+    collaborations?: Collaboration;
     areaSlugs?: string[];
     salary?: Salary;
-}
+    description?: string;
+};
+
+type ApiResponse = {
+    resultSet?: Offer[];
+};
+
+type OutputItem = {
+    title: string | undefined;
+    company: string | undefined;
+    url: string;
+    location: string | undefined;
+    isRemote: boolean;
+    seniority: string;
+    collaboration: Collaboration | undefined;
+    salary_min: number | undefined;
+    salary_max: number | undefined;
+    salary_currency: string | undefined;
+};
 
 await Actor.init();
+
+// Stop quickly when the user aborts the run, to avoid unnecessary compute costs
+Actor.on('aborting', async () => {
+    await Actor.exit();
+});
 
 const { keyword = '', seniority = '', maxResults = 50 } = (await Actor.getInput<Input>()) ?? {};
 
@@ -67,19 +95,7 @@ while (collected < maxResults) {
         break;
     }
 
-    // Response shape: { resultSet: Offer[] }
-    // Example item:
-    // {
-    //   name: "Junior JavaScript Developer",
-    //   company: "Acme s.r.o.",
-    //   url: "/job/12345/junior-javascript-developer",   // relative path — prepend BASE_URL for full link
-    //   locations: "Prague",
-    //   isRemote: true,
-    //   seniorities: ["junior"],
-    //   areaSlugs: ["front-end", "dev"],                // used to filter out non-dev roles
-    //   salary: { min: 40000, max: 60000, currency: "CZK", measure: "monthly" }
-    // }
-    const { resultSet: offers = [] } = (await response.json()) as { resultSet?: Offer[] };
+    const { resultSet: offers = [] } = (await response.json()) as ApiResponse;
 
     if (!offers.length) {
         log.info('No more results from API.');
@@ -90,12 +106,14 @@ while (collected < maxResults) {
         if (collected >= maxResults) break;
 
         const isDevRole = (offer.areaSlugs ?? []).some((slug) => DEV_AREA_SLUGS.has(slug));
-        const isSeniorityMatch = !seniority || (offer.seniorities ?? []).includes(seniority);
-        const isKeywordMatch = !keyword || offer.name?.toLowerCase().includes(keyword.toLowerCase());
+        // The public API has no seniority query param, so we filter client-side
+        const isSeniorityMatch = !seniority || (offer.seniorities ?? []).includes(seniority as Seniority);
+        // The API can return broader results than expected - this double-checks the keyword is actually in the title or description
+        const isKeywordMatch = !keyword || offer.name?.toLowerCase().includes(keyword.toLowerCase()) || offer.description?.toLowerCase().includes(keyword.toLowerCase());
         if (!isDevRole || !isSeniorityMatch || !isKeywordMatch) continue;
 
         const { salary } = offer;
-        await Actor.pushData({
+        const item: OutputItem = {
             title: offer.name,
             company: offer.company,
             url: `${BASE_URL}${offer.url}`,
@@ -106,7 +124,8 @@ while (collected < maxResults) {
             salary_min: salary?.min,
             salary_max: salary?.max,
             salary_currency: salary?.currency,
-        });
+        };
+        await Actor.pushData(item);
         collected++;
     }
 

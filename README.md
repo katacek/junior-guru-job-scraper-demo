@@ -1,8 +1,8 @@
-# Junior Job Tracker — StartupJobs.cz
+# StartupJobs.cz demo scraper
 
-An [Apify Actor](https://apify.com/actors) that collects junior developer job listings from [StartupJobs.cz](https://www.startupjobs.cz) using their public API.
+An [Apify Actor](https://apify.com/actors) that collects developers job listings from [StartupJobs.cz](https://www.startupjobs.cz) using their public API.
 
-Built as a live demo for the [junior.guru](https://junior.guru) community talk *"Scraping bez strachu"*.
+Built as a live demo for the [junior.guru](https://junior.guru) community talk *"Web scraping: Nechte internet pracovat za vás"*.
 
 ---
 
@@ -10,7 +10,7 @@ Built as a live demo for the [junior.guru](https://junior.guru) community talk *
 
 You give it a keyword (e.g. `junior`, `python`, `javascript`) and it returns a list of matching developer/engineer job offers including title, company, location, salary, and a direct link. Non-tech roles (sales, marketing, etc.) are filtered out automatically.
 
-Results are stored in an Apify Dataset and can be exported to **CSV**, **JSON**, or **Google Sheets** in one click.
+Results are stored in an Apify Dataset and can be exported to **CSV**, **JSON**, or other formats in one click.
 
 ---
 
@@ -70,7 +70,7 @@ The entire actor is in [`src/main.ts`](src/main.ts). Here's what it does:
 
 ```typescript
 await Actor.init();
-const { keyword = 'junior', maxResults = 50 } = await Actor.getInput() ?? {};
+const { keyword = '', seniority = '', maxResults = 50 } = await Actor.getInput() ?? {};
 
 while (collected < maxResults) {
     // 1. Call the StartupJobs API — plain fetch(), JSON response
@@ -78,10 +78,10 @@ while (collected < maxResults) {
     const { resultSet: offers } = await response.json();
 
     for (const offer of offers) {
-        // 2. Skip non-developer roles (sales, marketing, etc.) and non-junior seniority
+        // 2. Skip non-developer roles (sales, marketing, etc.) and wrong seniority
         const isDevRole = offer.areaSlugs.some((slug) => DEV_AREA_SLUGS.has(slug));
-        const isJunior = offer.seniorities.includes('junior');
-        if (!isDevRole || !isJunior) continue;
+        const isSeniorityMatch = !seniority || offer.seniorities.includes(seniority);
+        if (!isDevRole || !isSeniorityMatch) continue;
 
         // 3. Pick the fields we care about and save to Apify Dataset
         await Actor.pushData({
@@ -117,6 +117,7 @@ To set a custom keyword, create `storage/key_value_stores/default/INPUT.json`:
 ```json
 {
   "keyword": "javascript",
+  "seniority": "junior",
   "maxResults": 20
 }
 ```
@@ -141,8 +142,8 @@ Your actor is now live at [console.apify.com](https://console.apify.com/actors) 
 3. Set cron: `0 8 * * 1-5` (Mon–Fri at 8:00)
 
 **Export results:**
-- Dataset → **Export** → CSV / JSON / Excel
-- Or connect directly to **Google Sheets** via Apify integrations
+- Dataset → **Export** → CSV / JSON
+- Or connect directly to **Gmail** via Apify integrations
 
 ---
 
@@ -178,7 +179,6 @@ The Apify [documentation](https://docs.apify.com/sdk/js) and [Academy](https://d
 
 | What | How |
 |---|---|
-| Filter by seniority | Check `offer.seniorities.includes('junior')` in the loop |
 | Email alert on new listings | Use Apify webhooks → Zapier → Gmail |
 | Compare day-over-day | Store results with a timestamp, diff on next run |
 | Scrape a JS-heavy site | Switch to `PlaywrightCrawler` from Crawlee |
