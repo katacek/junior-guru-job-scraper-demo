@@ -229,4 +229,4 @@ The Apify [documentation](https://docs.apify.com/sdk/js) and [Academy](https://d
 - [Apify SDK for JavaScript/TypeScript](https://docs.apify.com/sdk/js)
 - [Apify Academy — Web scraping for beginners](https://docs.apify.com/academy/web-scraping-for-beginners)
 - [junior.guru](https://junior.guru) — community and handbook for junior developers in CZ/SK
-- [Talk slides](#) *(link will be added after the event)*
+- [Talk slides](https://docs.google.com/presentation/d/1wspqGNs5wx_i-V9UjuokDIbepCueCm0D2KmenmDWBjo/edit?usp=sharing)
