@@ -179,7 +179,6 @@ The Apify [documentation](https://docs.apify.com/sdk/js) and [Academy](https://d
 
 | What | How |
 |---|---|
-| Email alert on new listings | Use Apify webhooks → Zapier → Gmail |
 | Compare day-over-day | Store results with a timestamp, diff on next run |
 | Scrape a JS-heavy site | Switch to `PlaywrightCrawler` from Crawlee |
 | Browse 29 000+ ready-made scrapers | [apify.com/store](https://apify.com/store) |
