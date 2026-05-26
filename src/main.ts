@@ -4,12 +4,13 @@ const BASE_URL = 'https://www.startupjobs.cz';
 const API_URL = `${BASE_URL}/api/offers`;
 const PAGE_SIZE = 20;
 
-// Set gives O(1) lookup; these are the area slugs the public API uses for dev roles
+// Set.has() checks membership in constant time regardless of size, unlike Array.includes() which scans from the start;
+// these are the area slugs the public API uses for dev roles
 const DEV_AREA_SLUGS = new Set([
     'vyvoj',
     'back-end-vyvojar',
     'front-end-vyvojar',
-    'fullstack-vyvojar',
+    'full-stack-vyvojar',
     'mobile-vyvojar',
     'machine-learning',
     'devops-specialista',
@@ -17,6 +18,8 @@ const DEV_AREA_SLUGS = new Set([
     'system-admin',
     'qa-tester',
     'developer',
+    'programator',
+    'data-scientist',
 ]);
 
 type Seniority = 'junior' | 'medior' | 'senior';
